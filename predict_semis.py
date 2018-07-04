@@ -43,6 +43,7 @@ matches['diff_shots_blocked']=matches['shots_blocked_1']-matches['shots_blocked_
 
 columns_of_interest = ['diff_goals_scored','diff_goals_against','diff_attempts_on_target','diff_shots_attempted','diff_attempts_off_target','diff_shots_blocked']    
 
+matches_2 = matches 
 train_X = matches[columns_of_interest]
 
 train_Y = matches['results']
@@ -96,9 +97,9 @@ def winning_probability (team_1,team_2):
         return pred_Y[0]
 
 # Quarter Finals Winning Probabilites: #
-print ('France vs Uruguay -> %f' %(winning_probability(['France'],['Uruguay'])))
+print ('Uruguay vs France -> %f' %(winning_probability(['Uruguay'],['France'])))
 print ('Belgium vs Brazil -> %f' %(winning_probability(['Belgium'],['Brazil'])))
-print ('Sweden vs England -> %f' %(winning_probability(['Sweden'],['England'])))
-print ('Russia vs Croatia -> %f' %(winning_probability(['Russia'],['Croatia'])))
+print ('England vs Sweden -> %f' %(winning_probability(['England'],['Sweden'])))
+print ('Croatia vs Russia -> %f' %(winning_probability(['Croatia'],['Russia'])))
 
 
