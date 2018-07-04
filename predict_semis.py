@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[31]:
+# In[14]:
 
 
 import pandas as pd
@@ -12,7 +12,7 @@ matches = pd.read_csv('ALL_MATCHES.csv')
 matches.head()
 
 
-# In[32]:
+# In[15]:
 
 
 
@@ -31,6 +31,8 @@ matches['attempts_off_target_2']=matches['attempts_off_target_2']/matches['match
 
 matches['shots_blocked_2']=matches['shots_blocked_2']/matches['matches_played_2']
 
+matches['clearances_2']=matches['clearances_2']/matches['matches_played_2']
+
 matches['goals_against_1']=matches['goals_against_1']/matches['matches_played_1']
 
 matches['attempts_on_target_1']=matches['attempts_on_target_1']/matches['matches_played_1']
@@ -40,6 +42,9 @@ matches['shots_attempted_1']=matches['shots_attempted_1']/matches['matches_playe
 matches['attempts_off_target_1']=matches['attempts_off_target_1']/matches['matches_played_1']
 
 matches['shots_blocked_1']=matches['shots_blocked_1']/matches['matches_played_1']
+
+matches['clearances_1']=matches['clearances_1']/matches['matches_played_1']
+
 matches.head()
 matches_2 = pd.DataFrame()
 visited=[]
@@ -66,7 +71,7 @@ matches = matches.reset_index(drop=True)
 matches[matches['Team_1']=='Russia']
 
 
-# In[33]:
+# In[16]:
 
 
 #Difference in Opposing Teams
@@ -81,14 +86,17 @@ matches['diff_shots_attempted']=matches['shots_attempted_1']-matches['shots_atte
 matches['diff_attempts_off_target']=matches['attempts_off_target_1']-matches['attempts_off_target_2']
 
 matches['diff_shots_blocked']=matches['shots_blocked_1']-matches['shots_blocked_2']
+
+matches['diff_clearances']=matches['clearances_1']-matches['clearances_2']
+
 matches.head()
 
 
-# In[34]:
+# In[17]:
 
 
 #Training Data
-columns_of_interest = ['diff_goals_scored','diff_goals_against','diff_attempts_on_target','diff_shots_attempted','diff_attempts_off_target','diff_shots_blocked']    
+columns_of_interest = ['diff_goals_scored','diff_goals_against','diff_attempts_on_target','diff_shots_attempted','diff_attempts_off_target','diff_shots_blocked','diff_clearances']    
 
 train_X = matches[columns_of_interest]
 
@@ -104,7 +112,7 @@ train_X=train_X.dropna()
 rf.fit(train_X,train_Y)
 
 
-# In[35]:
+# In[18]:
 
 
 #Function to return weight of wining of team_1 against team_2
@@ -122,12 +130,37 @@ def winning_probability (team_1,team_2):
         for col in df.columns:
             res[col+"_1"]=pd.DataFrame(first[col])
             res[col+"_2"]=pd.DataFrame(second[col])
-        for col in df.columns:
-            res[col+"_2"]=pd.DataFrame(second[col])
-            res[col+"_1"]=pd.DataFrame(first[col])
 			
         test_matches = test_matches.append(res)
         
+        test_matches['goals_scored_1']=test_matches['goals_scored_1']/test_matches['matches_played_1']
+
+        test_matches['goals_scored_2']=test_matches['goals_scored_2']/test_matches['matches_played_2']
+
+        test_matches['goals_against_2']=test_matches['goals_against_2']/test_matches['matches_played_2']
+
+        test_matches['attempts_on_target_2']=test_matches['attempts_on_target_2']/test_matches['matches_played_2']
+
+        test_matches['shots_attempted_2']=test_matches['shots_attempted_2']/test_matches['matches_played_2']
+
+        test_matches['attempts_off_target_2']=test_matches['attempts_off_target_2']/test_matches['matches_played_2']
+
+        test_matches['shots_blocked_2']=test_matches['shots_blocked_2']/test_matches['matches_played_2']
+
+        test_matches['clearances_2']=test_matches['clearances_2']/test_matches['matches_played_2']
+
+        test_matches['goals_against_1']=test_matches['goals_against_1']/test_matches['matches_played_1']
+
+        test_matches['attempts_on_target_1']=test_matches['attempts_on_target_1']/test_matches['matches_played_1']
+
+        test_matches['shots_attempted_1']=test_matches['shots_attempted_1']/test_matches['matches_played_1']
+
+        test_matches['attempts_off_target_1']=test_matches['attempts_off_target_1']/test_matches['matches_played_1']
+
+        test_matches['shots_blocked_1']=test_matches['shots_blocked_1']/test_matches['matches_played_1']
+
+        test_matches['clearances_1']=test_matches['clearances_1']/test_matches['matches_played_1']
+
         test_matches['diff_goals_scored']=test_matches['goals_scored_1']-test_matches['goals_scored_2']
     
         test_matches['diff_goals_against']=test_matches['goals_against_1']-test_matches['goals_against_2']
@@ -139,6 +172,8 @@ def winning_probability (team_1,team_2):
         test_matches['diff_attempts_off_target']=test_matches['attempts_off_target_1']-test_matches['attempts_off_target_2']
     
         test_matches['diff_shots_blocked']=test_matches['shots_blocked_1']-test_matches['shots_blocked_2']
+        
+        test_matches['diff_clearances']=matches['clearances_1']-matches['clearances_2']
     
         test_X = test_matches[columns_of_interest]
     
@@ -157,7 +192,7 @@ def get_probability (team_1,team_2):
     return X
 
 
-# In[40]:
+# In[21]:
 
 
 # Quarter Finals Winning Probabilites: #
