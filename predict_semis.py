@@ -65,11 +65,14 @@ def winning_probability (team_1,team_2):
         first = first.reset_index(drop=True)
         second = second.reset_index(drop=True)
         res = pd.DataFrame()
-        
-	for col in df.columns:
+
+        for col in df.columns:
+            res[col+"_1"]=pd.DataFrame(first[col])
+            res[col+"_2"]=pd.DataFrame(second[col])
+        for col in df.columns:
             res[col+"_2"]=pd.DataFrame(second[col])
             res[col+"_1"]=pd.DataFrame(first[col])
-       
+			
         test_matches = test_matches.append(res)
         
         test_matches['diff_goals_scored']=test_matches['goals_scored_1']-test_matches['goals_scored_2']
